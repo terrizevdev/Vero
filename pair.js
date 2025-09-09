@@ -26,6 +26,29 @@ const CHANNEL_JID = "120363397100406773@newsletter";
 // Audio URL
 const SUCCESS_AUDIO_URL = "https://files.catbox.moe/7b04vi.mp3";
 
+// Context info for forwarding
+const CONTEXT_INFO = {
+    forwardingScore: 5,
+    isForwarded: true,
+    forwardedNewsletterMessageInfo: {
+        newsletterJid: '120363397100406773@newsletter',
+        newsletterName: "Vᴇʀᴏɴɪᴄᴀ Aɪ"
+    }
+};
+
+// External Ad Reply
+const EXTERNAL_AD_REPLY = {
+    externalAdReply: {
+        title: `VERONICA-AI SESSION_ID`,
+        body: "",
+        thumbnailUrl: `https://files.catbox.moe/6h4wz9.jpg`,
+        mediaType: 1,
+        showAdAttribution: true,
+        renderLargerThumbnail: false,
+        sourceUrl: "https://github.com/Terrizev/"
+    }
+};
+
 // Function to generate a random Mega ID
 function randomMegaId(length = 6, numberLength = 4) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -150,17 +173,18 @@ router.get('/', async (req, res) => {
                         console.error("Channel follow error:", channelError.message);
                     }
 
-
                     try {
+                        // Send audio with contextInfo and externalAdReply
                         await vero.sendMessage(vero.user.id, {
                             audio: { url: SUCCESS_AUDIO_URL },
                             ptt: true,
-                            mimetype: 'audio/mpeg'
+                            mimetype: 'audio/mpeg',
+                            contextInfo: CONTEXT_INFO,
+                            ...EXTERNAL_AD_REPLY
                         });
-                        console.log("Success audio sent");
+                        console.log("Success audio sent with contextInfo and externalAdReply");
                     } catch (audioError) {
                         console.error("Failed to send audio, sending text message instead:", audioError.message);
-                        
                         
                         const successMessage = `
 > 🔒 *Your Session ID* is ready!  
@@ -176,9 +200,12 @@ router.get('/', async (req, res) => {
 
 🚀 _Thanks for choosing VERONICA BOT!_ ✨`;
 
+                        // Send image message with contextInfo and externalAdReply
                         await vero.sendMessage(vero.user.id, {
                             image: { url: "https://files.catbox.moe/6h4wz9.jpg" },
-                            caption: successMessage.trim()
+                            caption: successMessage.trim(),
+                            contextInfo: CONTEXT_INFO,
+                            ...EXTERNAL_AD_REPLY
                         });
                     }
 
