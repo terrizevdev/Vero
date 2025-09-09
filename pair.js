@@ -11,7 +11,7 @@ const {
     delay,
     makeCacheableSignalKeyStore,
     Browsers
-} = require("baileys");
+} = require("@whiskeysockets/baileys");
 
 // Array of Mega credentials
 const megaCredentials = [
