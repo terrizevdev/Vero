@@ -1,0 +1,30 @@
+{
+  "description": "gifted-pair-code",
+  "main": "./index.js",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "start": "pm2 start indexa.js --deep-monitoring --attach --name gifted",
+    "stop": "pm2 stop gifted",
+    "restart": "pm2 restart gifted"
+  },
+  "author": "Mr Frank",
+  "license": "GPL-3.0 license",
+  "dependencies": {
+    "@whiskeysockets/baileys": "npm:angularsockets",
+    "awesome-phonenumber": "^2.64.0",
+    "body-parser": "^1.20.1",
+    "express": "^4.18.1",
+    "megajs": "^1.1.0",
+    "path": "^0.12.7",
+    "phone": "3.1.30",
+    "pino": "^8.1.0",
+    "pm2": "^6.0.5",
+    "qrcode": "^1.5.3",
+    "dotenv": "latest",
+    "@octokit/rest":"latest"
+  
+  }
+}

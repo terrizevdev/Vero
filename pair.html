@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VERONICA | PAIR CODE</title>
+  <!-- Favicon -->
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"></script>
+  <style>
+    :root {
+      --primary: #FF4D8D;
+      --accent:  #4D94FF;
+      --dark:    #1a0f1a;
+      --light:   #ffe5f6;
+      --glass-bg: rgba(255,255,255,0.07);
+      --glass-border: rgba(255,255,255,0.2);
+      --transition: all 0.3s ease-in-out;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; transition:var(--transition); }
+    body {
+      background: var(--dark);
+      color: var(--light);
+      min-height:100vh;
+      display:flex; flex-direction:column;
+      position: relative;
+      overflow-x: hidden;
+    }
+    /* Edge strips */
+    body::before, body::after {
+      content: '';
+      position: fixed;
+      width:8px;
+      background: var(--accent);
+      z-index:999;
+    }
+    body::before { left:0; animation: slideDown 4s infinite alternate; }
+    body::after { right:0; animation: slideDown 4s infinite alternate-reverse; }
+    @keyframes slideDown { 0%{transform: translateY(-100%);} 100%{transform: translateY(100%);} }
+    
+    /* Particles.js background */
+    #particles-js {
+      position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1;
+    }
+    
+    /* Navbar */
+    .navbar {
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      position:fixed; top:0; width:100%; padding:1rem 2rem; z-index:1000;
+      border-bottom:1px solid var(--glass-border);
+      box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+    }
+    .navbar-container {
+      max-width:1200px; margin:0 auto;
+      display:flex; justify-content:flex-start; align-items:center;
+    }
+    .logo { 
+      color:var(--light); 
+      text-decoration:none; 
+      font-size:1.75rem; 
+      font-weight:700; 
+      display:flex; 
+      align-items:center; 
+      gap:0.75rem; 
+    }
+    .logo i { color:var(--accent); animation:pulse 2s infinite; }
+    .logo-img {
+      height: 40px;
+      width: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+      box-shadow: 0 0 10px var(--primary);
+    }
+
+    /* Hero */
+    .hero { padding:8rem 2rem 4rem; text-align:center; }
+    .hero h1 {
+      font-size:3rem;
+      background:linear-gradient(to right,var(--primary),var(--accent));
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+      animation: glowText 2s ease-in-out infinite alternate;
+    }
+    @keyframes glowText {
+      from { text-shadow: 0 0 10px var(--primary); }
+      to   { text-shadow: 0 0 20px var(--accent); }
+    }
+    .typing-text {
+      display:inline-block; overflow:hidden; white-space:nowrap;
+      border-right:3px solid var(--accent);
+      animation:typing 3.5s steps(40,end), blink-caret 0.75s step-end infinite;
+      letter-spacing:2px; font-size:1.3rem; margin-top:1rem;
+    }
+
+    /* Pair Code card */
+    .pair-section { padding:2rem 2rem 4rem; flex:1; }
+    .pair-card {
+      max-width:480px; margin:0 auto;
+      background:var(--glass-bg);
+      border:1px solid var(--glass-border);
+      border-radius:20px;
+      padding:3rem;
+      backdrop-filter: blur(16px);
+      box-shadow:0 8px 30px rgba(0, 0, 0, 0.5);
+      animation:fadeInUp 0.8s ease forwards;
+    }
+    .pair-card h2 {
+      text-align:center; color:var(--accent);
+      margin-bottom:1rem; font-size:2rem;
+      position: relative;
+    }
+    .pair-card h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px; left: 50%; transform: translateX(-50%);
+      width: 60px; height: 4px; background: var(--primary);
+      border-radius: 2px;
+      animation: underlineAnim 1.5s infinite;
+    }
+    @keyframes underlineAnim {
+      0%,100% { width: 60px; }
+      50%     { width:100px; }
+    }
+    .pair-card p {
+      color:rgba(255,255,255,0.7);
+      text-align:center; margin-bottom:1.5rem;
+    }
+    .pair-card label {
+      display:block; color:var(--light);
+      margin-bottom:0.3rem; font-weight:500;
+    }
+    .pair-card input[type="text"] {
+      width:100%; padding:1rem;
+      border-radius:10px; border:1px solid rgba(255,255,255,0.2);
+      background:rgba(255,255,255,0.15); color:var(--light);
+      margin-bottom:1.5rem;
+    }
+    .button-group { display:flex; gap:0.5rem; margin-bottom:1rem; }
+    .btn {
+      flex:1; padding:0.8rem;
+      border:none; border-radius:10px;
+      font-size:1rem; font-weight:500;
+      background:var(--primary); color:var(--dark);
+      cursor:pointer; position:relative; overflow:hidden;
+    }
+    .btn::before {
+      content: ''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:rgba(255,255,255,0.2); transition:var(--transition);
+    }
+    .btn:hover::before { left:0; }
+    .btn:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(255, 77, 141, 0.3); }
+
+    .btn-secondary {
+      background:transparent; color:var(--primary); border:2px solid var(--primary);
+    }
+    .btn-secondary:hover { background:rgba(255, 77, 141, 0.1); }
+
+    #loading-spinner { text-align:center; margin-bottom:1rem; display:none; }
+    #pair {
+      color:var(--light); text-align:center;
+      word-break:break-word; margin-bottom:1rem;
+    }
+    #copy-code, #validate-code { display:none; width:100%; margin-bottom:0.5rem; }
+
+    /* Loading animation */
+    .lds-ellipsis { display:inline-block; position:relative; width:80px; height:20px; }
+    .lds-ellipsis div { position:absolute; top:8px; width:10px; height:10px; border-radius:50%; background:var(--primary); animation-timing-function:cubic-bezier(0,1,1,0); }
+    .lds-ellipsis div:nth-child(1){left:8px; animation:lds1 0.6s infinite;} .lds-ellipsis div:nth-child(2){left:8px; animation:lds2 0.6s infinite;}
+    .lds-ellipsis div:nth-child(3){left:32px; animation:lds2 0.6s infinite;} .lds-ellipsis div:nth-child(4){left:56px; animation:lds3 0.6s infinite;}
+    @keyframes lds1 {0%{transform:scale(0);}100%{transform:scale(1);}} @keyframes lds3 {0%{transform:scale(1);}100%{transform:scale(0);}} @keyframes lds2 {0%{transform:translate(0,0);}100%{transform:translate(24px,0);}}
+    @keyframes fadeInUp {from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+    @keyframes typing {from{width:0;}to{width:100%;}} @keyframes blink-caret {from,to{border-color:transparent;}50%{border-color:var(--accent);}} @keyframes pulse {0%,100%{transform:scale(1);}50%{transform:scale(1.1);}}
+
+    /* Footer */
+    footer {
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      border-top:0.2px solid #404146;
+      padding:1.5rem 2rem;
+      text-align:center;
+      font-size:0.9rem;
+      color:var(--light);
+      box-shadow: 0 -4px 30px rgba(0,0,0,0.3);
+      position: relative;
+      margin-top:auto;
+    }
+    footer span {
+      color: var(--accent);
+      font-weight:600;
+    }
+    footer:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 -6px 40px rgba(77, 148, 255, 0.4);
+    }
+  </style>
+</head>
+<body>
+  <div id="particles-js"></div>
+  
+  <header class="navbar">
+    <div class="navbar-container">
+      <a href="#" class="logo">
+        <img src="https://files.catbox.moe/6h4wz9.jpg" alt="Veronica Logo" class="logo-img">
+        <span style="font-weight: bold; font-size: 20px; text-shadow: 0 0 10px var(--primary)">VERONICA</span>
+      </a>
+    </div>
+  </header>
+  
+  <section class="hero">
+    <h1>VERONICA</h1>
+    <div class="typing-text">Get your SESSION ID</div>
+  </section>
+  
+  <section class="pair-section">
+    <div class="pair-card">
+      <h2>VERONICA PAIR</h2>
+      <p>Enter your WhatsApp number with country code to get your pairing code and link.</p>
+      <label for="phone-number">Phone Number</label>
+      <input type="text" id="phone-number" placeholder="e.g., +26371234">
+
+      <div class="button-group">
+        <button class="btn" id="generate-code">Get Code & Link</button>
+        <button class="btn btn-secondary" id="validate-code">Validate Session</button>
+      </div>
+
+      <div id="loading-spinner">
+        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+        <p>Generating your code...</p>
+      </div>
+      <div id="pair"></div>
+      <button class="btn" id="copy-code">Copy Code</button>
+    </div>
+  </section>
+  
+  <footer>&copy; <span id="currentYear"></span> VERONICA. Powered by <span>Keith</span></footer>
+  
+  <script>
+    // Particles.js init
+    particlesJS("particles-js", {
+      particles: { 
+        number:{value:60}, 
+        color:{value:"#4D94FF"}, 
+        size:{value:1}, 
+        line_linked:{
+          enable:true,
+          distance:120,
+          color:"#FF4D8D",
+          opacity:0.4,
+          width:1
+        }, 
+        move:{
+          enable:true,
+          speed:1,
+          out_mode:"out"
+        } 
+      },
+      interactivity:{ 
+        events:{
+          onhover:{
+            enable:true,
+            mode:"grab"
+          },
+          onclick:{
+            enable:true,
+            mode:"push"
+          }
+        }, 
+        modes:{
+          grab:{
+            distance:200,
+            line_linked:{
+              opacity:0.6
+            }
+          }, 
+          push:{
+            particles_nb:2
+          }
+        } 
+      }, 
+      retina_detect:true
+    });
+
+    // Footer year
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+    // Welcome alert
+    document.addEventListener("DOMContentLoaded", () => { 
+      swal("Welcome!", "Get your WhatsApp pairing code but make sure u forked the repo for it to work repo link👇 https://github.com/Terrizev/VERONICA-AI", "info"); 
+    });
+
+    // Pair code logic
+    const genBtn = document.getElementById('generate-code');
+    const valBtn = document.getElementById('validate-code');
+    const copyBtn = document.getElementById('copy-code');
+    const spinner = document.getElementById('loading-spinner');
+    const pairDiv = document.getElementById('pair');
+    const phoneInput = document.getElementById('phone-number');
+
+    async function copyToClipboard() {
+      const code = copyBtn.dataset.code;
+      try { 
+        await navigator.clipboard.writeText(code); 
+        copyBtn.textContent = 'Copied!'; 
+        setTimeout(() => copyBtn.textContent = 'Copy Code', 2000); 
+      }
+      catch (err) { 
+        console.error('Copy failed:', err); 
+      }
+    }
+
+    genBtn.addEventListener('click', async () => {
+      const num = phoneInput.value.replace(/\D/g,'');
+      if (!num) { 
+        pairDiv.textContent = '❗ Please enter your WhatsApp number with country code.'; 
+        return; 
+      }
+      spinner.style.display='block'; 
+      pairDiv.textContent=''; 
+      valBtn.style.display='none'; 
+      copyBtn.style.display='none'; 
+      genBtn.disabled=true;
+      
+      try {
+        phoneInput.value='+'+num;
+        await new Promise(r=>setTimeout(r,1500));
+        const {data} = await axios.get(`/code?number=${num}`);
+        const code=data.code||'❗ Service Unavailable';
+        const waLink=`https://wa.me/${num}?text=${encodeURIComponent(code)}`;
+        pairDiv.innerHTML=`<p>Your Code: <strong>${code}</strong></p><p><a href="${waLink}" target="_blank" style="color:var(--accent);">Open WhatsApp Link</a></p>`;
+        copyBtn.dataset.code=code; 
+        copyBtn.style.display='block'; 
+        valBtn.style.display='block';
+      } catch { 
+        pairDiv.textContent='❗ Error, please try again later.'; 
+      }
+      finally { 
+        spinner.style.display='none'; 
+        genBtn.disabled=false; 
+      }
+    });
+    
+    copyBtn.addEventListener('click',copyToClipboard);
+    valBtn.addEventListener('click',()=>window.location.href='/validate');
+    phoneInput.addEventListener('input',function(){ 
+      let v=this.value.replace(/\D/g,''); 
+      this.value=v?'+'+v:''; 
+    });
+  </script>
+</body>
+</html>
