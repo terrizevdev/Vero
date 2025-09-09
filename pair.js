@@ -11,11 +11,11 @@ const {
     delay,
     makeCacheableSignalKeyStore,
     Browsers
-} = require("@whiskeysockets/baileys");
+} = require("baileys");
 
 // Array of Mega credentials
 const megaCredentials = [
-    { email: 'aminiikeith@gmail.com', password: '@keithtech16' },
+    { email: 'kibuukauthuman123@gmail.com', password: 'j42cvCmC2L_RF:2' },
     { email: '', password: '' }
 ];
 
