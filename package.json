@@ -14,6 +14,7 @@
   "license": "GPL-3.0 license",
   "dependencies": {
     "@whiskeysockets/baileys": "npm:angularsockets",
+    "baileys":"npm:baileys-mod@^6.8.5",
     "awesome-phonenumber": "^2.64.0",
     "body-parser": "^1.20.1",
     "express": "^4.18.1",
