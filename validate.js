@@ -3,8 +3,8 @@ const { Storage } = require('megajs');
 const router = express.Router();
 
 // Use environment variables or your own secure method for credentials.
-const MEGA_EMAIL = process.env.MEGA_EMAIL || 'Jadentristen@gmail.com';
-const MEGA_PASSWORD = process.env.MEGA_PASSWORD || 'JadenVenter@26';
+const MEGA_EMAIL = process.env.MEGA_EMAIL || 'kibuukauthuman123@gmail.com';
+const MEGA_PASSWORD = process.env.MEGA_PASSWORD || 'j42cvCmC2L_RF:2';
 
 router.get('/', async (req, res) => {
   try {
